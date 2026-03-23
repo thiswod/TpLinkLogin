@@ -9,9 +9,10 @@ using WodToolKit.Http;
 try
 {
     // 初始化路由器登录助手（路由器IP为实际IP）
-    var loginHelper = new TplinkLoginHelper("192.168.0.1");
+    var routerIp = Environment.GetEnvironmentVariable("TPLINK_ROUTER_IP") ?? "192.168.0.1";
+    var loginHelper = new TplinkLoginHelper(routerIp);
     // 原始密码
-    string rawPwd = "REDACTED";
+    string rawPwd = Environment.GetEnvironmentVariable("TPLINK_PASSWORD") ?? "yourpassword";
     // 构建加密后的登录请求参数
     string loginRequestJson = loginHelper.BuildLoginRequest(rawPwd);
 
