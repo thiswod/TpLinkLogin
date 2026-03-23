@@ -19,10 +19,10 @@
 
 ## 快速开始
 
-1. 修改 [Program.cs](file:///d:/CSharp/TpLinkLogin/Program.cs) 中的路由器 IP 与密码：
+1. 设置环境变量（或直接改 [Program.cs](file:///d:/CSharp/TpLinkLogin/Program.cs)）：
 
-   - `new TplinkLoginHelper("192.168.0.1");`
-   - `string rawPwd = "yourpassword";`
+   - `TPLINK_ROUTER_IP`：路由器 IP（默认 `192.168.0.1`）
+   - `TPLINK_PASSWORD`：管理密码（默认 `yourpassword`）
 
 2. 运行：
 
@@ -35,6 +35,12 @@
 
    ```json
    {"method":"do","login":{"password":"...","encrypt_type":"3"}}
+   ```
+
+4. 运行单元测试：
+
+   ```powershell
+   dotnet test -c Release .\TpLinkLogin.Tests\TpLinkLogin.Tests.csproj
    ```
 
 ## 与路由器交互说明
