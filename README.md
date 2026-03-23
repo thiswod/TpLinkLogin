@@ -14,15 +14,14 @@
 
 ## 环境要求
 
-- .NET SDK：`net10.0`（见 [TpLinkLogin.csproj](file:///d:/CSharp/TpLinkLogin/TpLinkLogin.csproj)）
-- 依赖包：Newtonsoft.Json、WodToolKit（NuGet 自动还原）
+- .NET SDK：`net10.0`（见 [TpLinkLogin.csproj](TpLinkLogin.csproj)）
 
 ## 快速开始
 
-1. 设置环境变量（或直接改 [Program.cs](file:///d:/CSharp/TpLinkLogin/Program.cs)）：
+1. 修改 [Program.cs](Program.cs) 中的路由器 IP 与密码（示例目前为硬编码）：
 
-   - `TPLINK_ROUTER_IP`：路由器 IP（默认 `192.168.0.1`）
-   - `TPLINK_PASSWORD`：管理密码（默认 `yourpassword`）
+   - `var routerIp = "192.168.0.1";`
+   - `string rawPwd = "YourPassword";`
 
 2. 运行：
 
@@ -37,11 +36,12 @@
    {"method":"do","login":{"password":"...","encrypt_type":"3"}}
    ```
 
-4. 运行单元测试：
+4. 当前示例代码会把该 JSON POST 到 `http://<router-ip>/`，但不会解析/展示登录响应，也不会自动提取 cookie/token。
 
-   ```powershell
-   dotnet test -c Release .\TpLinkLogin.Tests\TpLinkLogin.Tests.csproj
-   ```
+## 依赖版本
+
+- Newtonsoft.Json：`13.0.4`
+- WodToolKit：`1.0.2.6`
 
 ## 与路由器交互说明
 
@@ -59,11 +59,11 @@
 
 2. 生成登录请求 JSON（同样 POST 到 `http://<router-ip>/`）。
 
-本项目当前仅负责生成登录请求 JSON；如果你希望“自动完成登录并拿到会话/cookie”，可以在此基础上继续实现第二次请求与响应处理。
+注意：当前项目示例只负责发送请求，不会自动提取/保存登录态（cookie/token）。如需完整登录闭环，需要补充响应解析与 cookie 管理。
 
 ## 代码结构
 
-- [Program.cs](file:///d:/CSharp/TpLinkLogin/Program.cs)
+- [Program.cs](Program.cs)
   - `TplinkLoginHelper`：封装获取加密信息与构建登录请求
   - `TplinkEncryptUtil`：MD5 与自定义对称混淆逻辑
   - 请求/响应模型：`EncryptInfoRequest / EncryptInfoResponse / LoginRequest` 等
@@ -71,5 +71,17 @@
 ## 注意事项
 
 - 请仅在你拥有管理权限的设备上使用。
-- 示例代码把密码写在源码里，仅用于演示；实际使用建议改为从环境变量或交互输入读取。
+- 示例代码把密码写在源码里，仅用于演示；实际使用建议避免硬编码（例如改为环境变量或交互输入）。
 - 项目请求使用 `http://`，并通过 WodToolKit 的 `HttpRequestClass` 发起请求；如需长期维护，建议评估迁移到 `HttpClient` 并完善超时/重试/异常处理。
+
+## 贡献
+
+欢迎提交 Issue / PR（例如：完善登录响应解析、cookie 保存、错误输出、参数化配置等）。提交前建议先运行：
+
+```powershell
+dotnet build -c Release
+```
+
+## 许可证
+
+见 [LICENSE.txt](LICENSE.txt)。
