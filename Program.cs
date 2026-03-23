@@ -37,6 +37,19 @@ public class TplinkLoginHelper
         _routerIp = routerIp;
     }
 
+    public static Dictionary<string, object?> BuildGetEncryptInfoRequestBody()
+    {
+        var jsonNull = System.Text.Json.JsonSerializer.SerializeToElement<object?>(null);
+        return new Dictionary<string, object?>
+        {
+            ["method"] = "do",
+            ["user_management"] = new Dictionary<string, object?>
+            {
+                ["get_encrypt_info"] = jsonNull
+            }
+        };
+    }
+
     /// <summary>
     /// 获取路由器加密信息（对应getEncryptInfo）
     /// </summary>
@@ -49,18 +62,7 @@ public class TplinkLoginHelper
             var request = new HttpRequestClass();
             request.SetTimeout(30);
             request.SetUserAgent("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36");
-
-            var jsonNull = System.Text.Json.JsonSerializer.SerializeToElement<object?>(null);
-            var requestBody = new Dictionary<string, object?>
-            {
-                ["method"] = "do",
-                ["user_management"] = new Dictionary<string, object?>
-                {
-                    ["get_encrypt_info"] = jsonNull
-                }
-            };
-
-            request.Open(url, HttpMethod.Post).Send(requestBody);
+            request.Open(url, HttpMethod.Post).Send(BuildGetEncryptInfoRequestBody());
             var responseData = request.GetResponse();
 
             if (responseData.StatusCode != 200)

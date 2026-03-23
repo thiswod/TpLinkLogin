@@ -12,4 +12,8 @@
     <PackageReference Include="WodToolKit" Version="1.0.2.6" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Compile Remove="TpLinkLogin.Tests\**\*.cs" />
+  </ItemGroup>
+
 </Project>
